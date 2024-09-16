@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dados
+data: # Aqui nós colocamos as variaveis de ambiente
+  DB_DATABASE: "testemed"
+  DB_HOST: ""
