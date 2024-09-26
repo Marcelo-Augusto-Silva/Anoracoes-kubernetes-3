@@ -6,3 +6,4 @@ kubectl get cj = Lista todos os Agendamentos
 
 kubectl api-resources = mostra tudo o que está disponivel no cluster
 
+O nodeport não é recomendado para utilizar no kubernetes, porém pode ser utilizado no minikube 
