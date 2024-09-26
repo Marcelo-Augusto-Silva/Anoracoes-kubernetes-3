@@ -29,6 +29,16 @@ spec:
           - name: DB_HOST
             valueFrom:
               configMapKeyRef:
-                  name: dados
-                  key: DB_HOST
+                name: dados
+                key: DB_HOST
+          - name: DB_HOST
+            valueFrom:
+              secretKeyRef:
+                name: senhas
+                key: DB_USER
+          - name: DB_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: senhas
+                key: DB_PASSWORD
 
