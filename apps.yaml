@@ -16,7 +16,7 @@ spec:
     spec:
       containers:
       - name: vollmed-api
-        image: maads2319:vollmed-api:1
+        image: maads2319/vollmed-api:1
         ports:
         - containerPort: 3000
 
@@ -31,7 +31,7 @@ spec:
               configMapKeyRef:
                 name: dados
                 key: DB_HOST
-          - name: DB_HOST
+          - name: DB_USER
             valueFrom:
               secretKeyRef:
                 name: senhas

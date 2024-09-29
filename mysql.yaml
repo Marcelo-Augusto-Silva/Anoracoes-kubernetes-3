@@ -1,0 +1,76 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: mysql
+  labels:
+    app: mysql
+spec:
+  ports:
+  - port: 3306
+    name: mysql
+  clusterIP: None
+  selector:
+    app: mysql
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: mysql
+spec:
+  selector:
+    matchLabels:
+      app: mysql # has to match .spec.template.metadata.labels
+  serviceName: "mysql"
+  replicas: 1 # by default is 1
+  minReadySeconds: 10 # by default is 0  Tempo minimo para estar pronto
+  template:
+    metadata:
+      labels:
+        app: mysql # has to match .spec.selector.matchLabels
+    spec:
+      terminationGracePeriodSeconds: 10 
+      containers:
+      - name: mysql
+        image: mysql:8
+        ports:
+        - containerPort: 3306
+        volumeMounts: # Onde nós vamos guardar a informação
+        - name: mysql-storage # Aqui nós colocamos o nome que iremos dar
+          mountPath: /var/lib/mysql # Aqui colocamos o local onde queremos que fique montado o volume dentro do container
+        
+        env:
+          - name: MYSQL_DATABASE #Aqeui nós colocamos o nome, pode ser qualquer nome
+            valueFrom:
+              configMapKeyRef:
+                name: dados #Aqui o nome do configmap
+                key: DB_DATABASE  #Nome da variavel que quer puxar          
+          - name: MYSQL_ROOT_PASSWORD
+            valueFrom:
+              secretKeyRef:
+                name: senhas
+                key: DB_PASSWORD
+        
+      volumes:
+        - name: 
+          persistentVolumeClaim: 
+            claimName: mysql-pvc # Aqui nós colocamos o nome do PVC
+
+---
+
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: mysql-pvc
+spec:
+  accessModes:
+    - ReadWriteOnce
+  volumeMode: Filesystem
+  resources:
+    requests:
+      storage: 8Gi
+  storageClassName: csi-hostpath-sc # CSI é um novo padrao e esse é o jeito de arnazebar no minikube
+  selector:
+    matchLabels:
+      release: "stable"
+    matchExpressions:
+      - {key: environment, operator: In, values: [dev]}

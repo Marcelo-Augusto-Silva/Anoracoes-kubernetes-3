@@ -4,4 +4,4 @@ metadata:
   name: dados
 data: # Aqui nós colocamos as variaveis de ambiente
   DB_DATABASE: "testemed"
-  DB_HOST: ""
+  DB_HOST: "mysql" #O nome do serviço
