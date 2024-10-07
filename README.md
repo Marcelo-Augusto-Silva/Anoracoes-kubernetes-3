@@ -24,3 +24,6 @@ minikube mount ./config:/var/lib/minikube/certs/config = comando para criar a pa
 
 
 minikube start --extra-config=apiserver.encryption-provider-config=/var/lib/minikube/certs/config/crypt.yaml = comando para iniciar o minikube com o arquivo de criptografia
+
+
+o Cronjob serve para agendar o Backup do banco de dados

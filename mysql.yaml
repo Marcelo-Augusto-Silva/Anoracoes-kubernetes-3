@@ -74,3 +74,23 @@ spec:
       release: "stable"
     matchExpressions:
       - {key: environment, operator: In, values: [dev]}
+
+
+---
+
+apiVersion: batch/v1
+kind: CronJob  #O CronJob server para agendar o backup do banco de dados
+metadata:
+  name: mysql-dump
+spec:
+  schedule: "0 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mysql-dump
+            image: leonardosartorello/mysqldump:v4
+            imagePullPolicy: IfNotPresent
+
+          restartPolicy: OnFailure
