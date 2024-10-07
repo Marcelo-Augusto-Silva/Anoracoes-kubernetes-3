@@ -1,9 +1,9 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: nodeport-vollmed
+  name: loadbalancer-vollmed
 spec: 
-  type: nodeport
+  type: LoadBalancer
   selector:
     app: vollmed
   ports:
