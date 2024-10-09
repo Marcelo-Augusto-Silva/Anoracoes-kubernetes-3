@@ -92,5 +92,33 @@ spec:
           - name: mysql-dump
             image: leonardosartorello/mysqldump:v4
             imagePullPolicy: IfNotPresent
+            restartPolicy: OnFailure
 
-          restartPolicy: OnFailure
+            env:
+            - name: MYSQL_ENV_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: DB_HOST
+            - name: MYSQL_ENV_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: DB_USER
+            - name: MYSQL_ENV_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: DB_PASSWORD
+
+          volumeMounts: # Onde nós vamos guardar a informação
+          - name: mysqldump # Aqui nós colocamos o nome que iremos dar
+            mountPath: /mysqldump # Aqui colocamos o local onde queremos que fique montado o volume dentro do container
+        
+
+          volumes:
+          - name: mysqldump
+            hostPath: #Aqui nós colocamos para salvar o backup em uma pasta no host
+              path: /home/gu/mysqldump  # Aqui nós colocamos o local da pasta no host
+
+            
