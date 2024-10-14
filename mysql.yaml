@@ -74,3 +74,51 @@ spec:
       release: "stable"
     matchExpressions:
       - {key: environment, operator: In, values: [dev]}
+
+
+---
+
+apiVersion: batch/v1
+kind: CronJob  #O CronJob server para agendar o backup do banco de dados
+metadata:
+  name: mysql-dump
+spec:
+  schedule: "0 3 * * *"
+  jobTemplate:
+    spec:
+      template:
+        spec:
+          containers:
+          - name: mysql-dump
+            image: leonardosartorello/mysqldump:v4
+            imagePullPolicy: IfNotPresent
+            
+
+            env:
+            - name: MYSQL_ENV_DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: dados
+                  key: DB_HOST
+            - name: MYSQL_ENV_DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: DB_USER
+            - name: MYSQL_ENV_DB_PASS
+              valueFrom:
+                secretKeyRef:
+                  name: senhas
+                  key: DB_PASSWORD
+
+            volumeMounts: # Onde nós vamos guardar a informação
+            - name: mysqldump # Aqui nós colocamos o nome que iremos dar
+              mountPath: /mysqldump # Aqui colocamos o local onde queremos que fique montado o volume dentro do container
+        
+          restartPolicy: OnFailure
+          volumes:
+          - name: mysqldump
+            hostPath: #Aqui nós colocamos para salvar o backup em uma pasta no host
+              path: /home/gu/mysqldump  # Aqui nós colocamos o local da pasta no host
+
+            

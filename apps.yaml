@@ -19,33 +19,32 @@ spec:
         image: maads2319/vollmed-api:1
         ports:
         - containerPort: 3000
-
         env:
-          - name: DB_DATABASE #Aqeui nós colocamos o nome, pode ser qualquer nome
-            valueFrom:
-              configMapKeyRef:
-                name: dados #Aqui o nome do configmap
-                key: DB_DATABASE  #Nome da variavel que quer puxar
-          - name: DB_HOST
-            valueFrom:
-              configMapKeyRef:
-                name: dados
-                key: DB_HOST
-          - name: DB_USER
-            valueFrom:
-              secretKeyRef:
-                name: senhas
-                key: DB_USER
-          - name: DB_PASSWORD
-            valueFrom:
-              secretKeyRef:
-                name: senhas
-                key: DB_PASSWORD
-          livenessProbe: # Verificar se a aplicação está respondendo
-            httpGet: # Metodo que irá usar, nesse caso irá usar o metodo Get
-              path: /paciente # Onde irá enviar a requisição 
-              port: 3000
-            initialDelaySeconds: 15 # tempo em segundos definido para o liveness começar a testar o container o quanto ele vai esperar
-            periodSecunds: 3 # A cada 3 segundos o kubernetes irá fazer uma requisição 
+        - name: DB_DATABASE #Aqeui nós colocamos o nome, pode ser qualquer nome
+          valueFrom:
+            configMapKeyRef:
+              name: dados #Aqui o nome do configmap
+              key: DB_DATABASE  #Nome da variavel que quer puxar
+        - name: DB_HOST
+          valueFrom:
+            configMapKeyRef:
+              name: dados
+              key: DB_HOST
+        - name: DB_USER
+          valueFrom:
+            secretKeyRef:
+              name: senhas
+              key: DB_USER
+        - name: DB_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: senhas
+              key: DB_PASSWORD
+        livenessProbe: # Verificar se a aplicação está respondendo
+          httpGet: # Metodo que irá usar, nesse caso irá usar o metodo Get
+            path: /paciente # Onde irá enviar a requisição 
+            port: 3000
+          initialDelaySeconds: 15 # tempo em segundos definido para o liveness começar a testar o container o quanto ele vai esperar
+          periodSeconds: 3 # A cada 3 segundos o kubernetes irá fazer uma requisição 
 
 

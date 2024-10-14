@@ -1,0 +1,14 @@
+apiVersion: apiserver.config.k8s.io/v1
+kind: EncryptionConfiguration
+resources:
+  - resources:  #Qauais recursos nós queremos criptografar 
+      - secrets
+      - configmaps
+    providers:
+      - aescbc:
+          keys:
+            - name: key1
+              # See the following text for more details about the secret value
+              secret: YMMUr1k+vajs0HWvq2tvB9xUz+deBlhR069yV9xAZf0=
+      - identity: {} # this fallback allows reading unencrypted secrets;
+                     # for example, during initial 
